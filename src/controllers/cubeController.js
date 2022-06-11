@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const cubeService = require('../services/cubeService');
+const { route } = require('./homeController');
 
 router.get('/create', (req, res) => {
     res.render('create');
@@ -21,6 +22,12 @@ router.post('/create', async (req, res) => {
         res.status(500).send(error.message);
     }
 
+});
+
+router.get('/details/:id', (req, res) => {
+    const cube = cubeService.getOne(req.params.id);
+
+    res.render('details', { cube });
 });
 
 module.exports = router;
