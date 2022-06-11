@@ -1,6 +1,16 @@
 const fs = require('fs/promises');
-const cubes = require('../db.json');
 const path = require('path');
+const cubes = require('../db.json');
+
+exports.getAll = (search = '', fromInput, toInput) => {
+    const from = Number(fromInput) || 0;
+    const to = Number(toInput) || 6;
+    const filteredCubes = cubes
+        .filter(cube => cube.name.toLowerCase().includes(search.toLowerCase()))
+        .filter(cube => cube.difficulty >= from && cube.difficulty <= to);
+
+    return filteredCubes;
+};
 
 exports.getOne = (cubeId) => cubes[cubeId];
 
