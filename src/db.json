@@ -18,5 +18,11 @@
         "name": "Megaminx",
         "imageUrl": "https://images-na.ssl-images-amazon.com/images/I/61HpQqVQ37L._SY355_.jpg",
         "difficulty": 3
+    },
+    {
+        "name": "New Heaven",
+        "description": "Adding test cube",
+        "imageUrl": "https://tse3.mm.bing.net/th/id/OIP.bri7zp6vD-ARW2xQKoV6AgHaHq?w=166&h=180&c=7&r=0&o=5&pid=1.7",
+        "difficulty": "5"
     }
 ]
