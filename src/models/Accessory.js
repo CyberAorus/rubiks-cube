@@ -5,12 +5,12 @@ const accessorySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    imgaeUrl: {
+    imageUrl: {
         type: String,
         required: true,
         validate: {
             validator: function () {
-                return this.imgaeUrl.startsWith('http');
+                return this.imageUrl.startsWith('http');
             },
             message: 'Image URL must start with http or https',
         },
