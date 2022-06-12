@@ -1,22 +1,23 @@
 const express = require('express');
-const hbs = require('express-handlebars');
 const router = require('./routes');
+const { initilize } = require('./config/database');
 
 const app = express();
+require('./config/handlebars')(app);
 const port = 5000;
-
 
 app.use('/static', express.static('public'));
 app.use(express.urlencoded({ extended: false }));
-
-app.engine('hbs', hbs.engine({
-    extname: 'hbs',
-}));
-
-app.set('view engine', 'hbs');
-app.set('views', './src/views');
 app.use(router);
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
-});
+initilize()
+    .then(() => {
+
+        app.listen(port, () => {
+            console.log(`Example app listening on port ${port}`);
+        });
+    })
+    .catch(err => {
+        console.log(err);
+    });
+
