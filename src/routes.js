@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.use('/', homeController);
 router.use('/cube', cubeController);
-router.use('/accessory/create', accessoryController);
+router.use('/accessory', accessoryController);
 
 
 module.exports = router;
