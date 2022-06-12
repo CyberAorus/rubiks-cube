@@ -23,9 +23,10 @@ const cubeSchema = new mongoose.Schema({
     }
 });
 
-cubeSchema.path('imageUrl').validate(function (url) {
-    return /(http(s?):)/.test(url);
-});
+
+cubeSchema.path('imageUrl').validate(function () {
+    return this.imageUrl.startsWith('http');
+}, 'Image URL must start with http');
 
 const Cube = mongoose.model('Cube', cubeSchema);
 
