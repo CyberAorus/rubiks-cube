@@ -1,22 +1,18 @@
-const fs = require('fs/promises');
-const path = require('path');
-const cubes = require('../db.json');
+const Cube = require('../models/Cube');
 
-exports.getAll = (search = '', fromInput, toInput) => {
-    const from = Number(fromInput) || 0;
-    const to = Number(toInput) || 6;
-    const filteredCubes = cubes
-        .filter(cube => cube.name.toLowerCase().includes(search.toLowerCase()))
-        .filter(cube => cube.difficulty >= from && cube.difficulty <= to);
+exports.getAll = async (search = '', fromInput, toInput) => {
+    
+    return await Cube.find().lean();
+    
+    // const from = Number(fromInput) || 0;
+    // const to = Number(toInput) || 6;
+    // const filteredCubes = cubes
+    //     .filter(cube => cube.name.toLowerCase().includes(search.toLowerCase()))
+    //     .filter(cube => cube.difficulty >= from && cube.difficulty <= to);
 
-    return filteredCubes;
+    // return filteredCubes;
 };
 
-exports.getOne = (cubeId) => cubes[cubeId];
+exports.getOne = (cubeId) => Cube.findById(cubeId);
 
-exports.save = (cube) => {
-    cubes.push(cube);
-    let textData = JSON.stringify(cubes, '', 4);
-
-    return fs.writeFile(path.resolve('src', 'db.json'), textData, { encoding: 'utf8' })
-}
+exports.create = (cube) => Cube.create(cube);
