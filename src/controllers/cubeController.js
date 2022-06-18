@@ -11,6 +11,7 @@ router.get('/create', isAuth, (req, res) => {
 
 router.post('/create', isAuth, async (req, res) => {
     const cube = req.body;
+    cube.owner = req.user._id;
     //TODO cube vallidation
     if (cube.name.length < 3) {
         res.status(400).send('Cube name should be at least 3 symbols long');
@@ -34,7 +35,9 @@ router.get('/details/:id', async (req, res) => {
 });
 
 router.get('/:cubeId/attach-accessory', async (req, res) => {
+
     const cube = await cubeService.getOneDetails(req.params.cubeId).lean();
+
     const accessories = await accessoryService.getAllUnique(cube.accessories).lean();
     res.render('accessory/attach', { cube, accessories });
 });
@@ -43,11 +46,19 @@ router.post('/:cubeId/attach-accessory', async (req, res) => {
     const accessoryId = req.body.accessory;
 
     await cubeService.attachAccessory(req.params.cubeId, accessoryId);
-    res.redirect(`/cube/details/${accessoryId}`);
+    res.redirect(`/cube/details/${req.params.cubeId}`);
 });
 
-router.get('/:cubeId/edit', async (req, res) => {
+router.get('/:cubeId/edit', isAuth, async (req, res) => {
     const cube = await cubeService.getOne(req.params.cubeId).lean();
+
+    cube[`difficulty${cube.difficulty}`] = true;
+
+    if (cube.owner != req.user._id) {
+        //TODO: add message
+        return res.redirect('/404')
+    }
+
     if (!cube) {
         res.redirect('/404');
     }
