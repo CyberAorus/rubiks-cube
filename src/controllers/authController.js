@@ -23,9 +23,10 @@ router.get('/login', (req, res) => {
 router.post('/login', async (req, res) => {
     let token = await authService.login(req.body);
     if (!token) {
-        //req.session.user = user;
         return res.redirect('/404');
     };
+    //res.cookie('jwt', token, { maxAge: 3600000, httpOnly: true });
+    res.cookie('session', token);
     res.redirect('/');
 });
 
