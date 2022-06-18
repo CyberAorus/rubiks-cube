@@ -20,9 +20,11 @@ exports.getOneDetails = (cubeId) => Cube.findById(cubeId).populate('accessories'
 
 exports.create = (cube) => Cube.create(cube);
 
+exports.edit = (cubeId, cubeData) => Cube.findByIdAndUpdate(cubeId, cubeData);
+
 exports.attachAccessory = async (cubeId, accessoryId) => {
-    let cube = await Cube.findById(cubeId);
-    let accessory = await Accessory.findById(accessoryId);
+    const cube = await Cube.findById(cubeId);
+    const accessory = await Accessory.findById(accessoryId);
 
     cube.accessories.push(accessory);
     accessory.cubes.push(cube);
