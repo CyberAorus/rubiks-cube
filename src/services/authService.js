@@ -1,10 +1,12 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const saltRounds = 10;
+const secret = 'thisistopsecret';
 
 exports.register = async (userData) => {
-    const { username, password, repeatPassword } = userData;
+    let { username, password, repeatPassword } = userData;
     //User.create(userData);
     // return form validation message
     if (password !== repeatPassword) {
@@ -26,3 +28,34 @@ exports.register = async (userData) => {
 
     return createdUser;
 }
+
+exports.login = async ({ username, password }) => {
+    let user = await User.findOne({ username });
+
+    if (!user) {
+        return null;
+    }
+
+    let isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+        return;
+    }
+
+    let result = new Promise((resolve, reject) => {
+        jwt.sign({ userId: user._id, username: user.usernmae }, secret, { expiresIn: '1h' }, (err, token) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(token);
+        });
+    });
+
+    return result;
+};
+
+
+
+
+
+
