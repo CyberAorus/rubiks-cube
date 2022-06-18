@@ -17,5 +17,12 @@ exports.register = async (userData) => {
         password: hashedPassword
     });
 
+    // let newUser = new User({
+    //     username,
+    //     password: hashedPassword
+    // });
+
+    // await newUser.save();
+
     return createdUser;
 }
