@@ -5,8 +5,7 @@ const { saltRounds, secret } = require('../constants');
 
 exports.register = async (userData) => {
     let { username, password, repeatPassword } = userData;
-    //User.create(userData);
-    // return form validation message
+
     if (password !== repeatPassword) {
         throw new Error('Passwords do not match');
     }
@@ -16,13 +15,6 @@ exports.register = async (userData) => {
         username,
         password: hashedPassword
     });
-
-    // let newUser = new User({
-    //     username,
-    //     password: hashedPassword
-    // });
-
-    // await newUser.save();
 
     return createdUser;
 }
@@ -37,7 +29,9 @@ exports.login = async ({ username, password }) => {
     let isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-        return;
+        throw {
+            message: 'Invalid username or password'
+        }
     }
 
     let result = new Promise((resolve, reject) => {

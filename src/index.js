@@ -3,6 +3,7 @@ const router = require('./routes');
 const cookieParser = require('cookie-parser');
 const { initilize } = require('./config/database');
 const { auth } = require('./middlewares/authMiddlewares');
+const { errorHandler } = require('./middlewares/errorHandlerMiddleware');
 
 const app = express();
 require('./config/handlebars')(app);
@@ -13,6 +14,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(auth);
 app.use(router);
+app.use(errorHandler);
 
 initilize()
     .then(() => {

@@ -8,22 +8,23 @@ router.get('/register', (req, res) => {
     res.render('auth/register');
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res, next) => {
 
     if (!isEmail(req.body.username)) {
 
-        return res.status(400).send('Invalid email');
+        //return res.status(400).send('Invalid email');
+        let error = {message: 'Invalid email'}
+        next(error);
     }
 
-    let createdUser = await authService.register(req.body);
-
-    if (createdUser) {
+    try {
+        await authService.register(req.body);
         res.redirect('/auth/login');
-    } else {
-        //TODO: add notification
-        res.redirect('404');
+    } catch (error) {
+        console.log(error);
+        next(error);
     }
-    res.redirect('/auth/register');
+    //res.redirect('/auth/register');
 });
 
 router.get('/login', (req, res) => {
@@ -31,12 +32,20 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    let token = await authService.login(req.body);
-    if (!token) {
-        return res.redirect('/404');
-    };
-    res.cookie(sessionName, token, { httpOnly: true });
-    res.redirect('/');
+
+    try {
+        let token = await authService.login(req.body);
+        if (!token) {
+            return res.status(400).redirect('404');
+        };
+        res.cookie(sessionName, token, { httpOnly: true });
+        res.redirect('/');
+        
+    } catch (error) {
+        res.status(400).render('auth/login', { error: error.message });
+    }
+
+
 });
 
 router.get('/logout', (req, res) => {
