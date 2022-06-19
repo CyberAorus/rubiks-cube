@@ -1,13 +1,22 @@
 const router = require('express').Router();
 const authService = require('../services/authService');
 const { sessionName } = require('../constants');
+const { isEmail } = require('../utils/validators');
+
 
 router.get('/register', (req, res) => {
     res.render('auth/register');
 });
 
 router.post('/register', async (req, res) => {
+
+    if (!isEmail(req.body.username)) {
+
+        return res.status(400).send('Invalid email');
+    }
+
     let createdUser = await authService.register(req.body);
+
     if (createdUser) {
         res.redirect('/auth/login');
     } else {
