@@ -41,10 +41,16 @@ router.post(
 );
 
 router.get('/details/:id', async (req, res) => {
-    const cube = await cubeService.getOne(req.params.id).lean();
-    const isOwner = cube.owner == req.user?._id;
 
-    res.render('details', { cube, isOwner });
+    try {
+        
+        const cube = await cubeService.getOne(req.params.id).lean();
+        const isOwner = cube.owner == req.user?._id;
+        res.render('details', { cube, isOwner });
+    } catch (error) {
+        res.render('404');
+    }
+    
 });
 
 router.get('/:cubeId/attach-accessory', async (req, res) => {
